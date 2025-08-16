@@ -60,20 +60,18 @@ async function handleCreateList(event: any, payload: { name: string; color?: str
   try {
     const db = getDatabase();
     const now = new Date().toISOString();
-    const maxOrder = Math.max(...db.lists.map(l => l.sort_order), 0);
-    const sortOrder = maxOrder + 1;
     
-    const list: List = {
+    const newList: List = {
       id: db.nextListId++,
       name: payload.name,
-      color: payload.color || null,
-      sort_order: sortOrder,
+      color: payload.color || '#3b82f6',
+      sort_order: db.lists.length,
       created_at: now,
       updated_at: now,
     };
     
-    db.lists.push(list);
-    return success(list);
+    db.lists.push(newList);
+    return success(newList);
   } catch (err) {
     return error('DB_ERROR', `Failed to create list: ${err}`);
   }
@@ -188,23 +186,23 @@ async function handleCreateTask(event: any, payload: Omit<Task, 'id' | 'created_
     const db = getDatabase();
     const now = new Date().toISOString();
     
-    const task: Task = {
+    const newTask: Task = {
       id: db.nextTaskId++,
       title: payload.title,
       date: payload.date,
-      start_time: payload.start_time || undefined,
-      end_time: payload.end_time || undefined,
-      priority: payload.priority,
+      start_time: payload.start_time || null,
+      end_time: payload.end_time || null,
+      priority: payload.priority || 'medium',
       list_id: payload.list_id || null,
+      notes: payload.notes || null,
+      reminder_time: payload.reminder_time || null,
       status: payload.status || 'pending',
-      notes: payload.notes || undefined,
-      remind_at: payload.remind_at || undefined,
       created_at: now,
       updated_at: now,
     };
     
-    db.tasks.push(task);
-    return success(task);
+    db.tasks.push(newTask);
+    return success(newTask);
   } catch (err) {
     return error('DB_ERROR', `Failed to create task: ${err}`);
   }
@@ -243,19 +241,19 @@ async function handleToggleComplete(event: any, { id, completed }: { id: ID; com
       return error('NOT_FOUND', 'Task not found');
     }
     
-    // 如果没有指定 completed，则切换状态
-    if (completed === undefined) {
-      completed = db.tasks[taskIndex].status === 'pending';
-    }
+    const task = db.tasks[taskIndex];
+    const newStatus = completed !== undefined 
+      ? (completed ? 'completed' : 'pending')
+      : (task.status === 'completed' ? 'pending' : 'completed');
     
-    const status = completed ? 'completed' : 'pending';
-    db.tasks[taskIndex] = {
-      ...db.tasks[taskIndex],
-      status,
+    const updatedTask = {
+      ...task,
+      status: newStatus as 'pending' | 'completed',
       updated_at: now,
     };
     
-    return success(db.tasks[taskIndex]);
+    db.tasks[taskIndex] = updatedTask;
+    return success(updatedTask);
   } catch (err) {
     return error('DB_ERROR', `Failed to toggle task completion: ${err}`);
   }
@@ -265,33 +263,23 @@ async function handleBulkMove(event: any, payload: { ids: ID[]; date?: string; s
   try {
     const db = getDatabase();
     const now = new Date().toISOString();
+    let updatedCount = 0;
     
-    let updated = 0;
-    
-    payload.ids.forEach(id => {
+    for (const id of payload.ids) {
       const taskIndex = db.tasks.findIndex(t => t.id === id);
       if (taskIndex !== -1) {
         const updates: Partial<Task> = { updated_at: now };
         
-        if (payload.date !== undefined) {
-          updates.date = payload.date;
-        }
-        if (payload.start_time !== undefined) {
-          updates.start_time = payload.start_time;
-        }
-        if (payload.end_time !== undefined) {
-          updates.end_time = payload.end_time;
-        }
+        if (payload.date) updates.date = payload.date;
+        if (payload.start_time !== undefined) updates.start_time = payload.start_time;
+        if (payload.end_time !== undefined) updates.end_time = payload.end_time;
         
-        db.tasks[taskIndex] = {
-          ...db.tasks[taskIndex],
-          ...updates,
-        };
-        updated++;
+        db.tasks[taskIndex] = { ...db.tasks[taskIndex], ...updates };
+        updatedCount++;
       }
-    });
+    }
     
-    return success({ updated });
+    return success({ updated: updatedCount });
   } catch (err) {
     return error('DB_ERROR', `Failed to bulk move tasks: ${err}`);
   }
