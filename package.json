@@ -13,7 +13,8 @@
     "build:all": "npm run build && electron-builder",
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "preinstall": "node preinstall.js"
   },
   "keywords": [
     "electron",

@@ -6,6 +6,24 @@
   <p>基于 Electron + React + TypeScript 构建的跨平台桌面应用</p>
 </div>
 
+## 📦 立即下载
+
+### 🚀 最新版本：v1.0.0
+
+**[📥 前往 Releases 页面下载](https://github.com/heswy/OrangeDue/releases/latest)**
+
+#### Windows 用户
+- **[OrangeDue Setup 1.0.0.exe](https://github.com/heswy/OrangeDue/releases/download/v1.0.0/OrangeDue%20Setup%201.0.0.exe)** - 推荐安装程序
+- **[OrangeDue 1.0.0.exe](https://github.com/heswy/OrangeDue/releases/download/v1.0.0/OrangeDue%201.0.0.exe)** - 便携版
+
+#### macOS 用户
+- **[OrangeDue-1.0.0-arm64.dmg](https://github.com/heswy/OrangeDue/releases/download/v1.0.0/OrangeDue-1.0.0-arm64.dmg)** - Apple Silicon (M1/M2/M3)
+- **[OrangeDue-1.0.0.dmg](https://github.com/heswy/OrangeDue/releases/download/v1.0.0/OrangeDue-1.0.0.dmg)** - Intel Mac
+- **[OrangeDue-1.0.0-arm64-mac.zip](https://github.com/heswy/OrangeDue/releases/download/v1.0.0/OrangeDue-1.0.0-arm64-mac.zip)** - Apple Silicon 压缩包
+- **[OrangeDue-1.0.0-mac.zip](https://github.com/heswy/OrangeDue/releases/download/v1.0.0/OrangeDue-1.0.0-mac.zip)** - Intel Mac 压缩包
+
+> 💡 **安装提示**：首次运行时，macOS 可能提示"无法验证开发者"，请在系统偏好设置 > 安全性与隐私中允许运行。
+
 ## ✨ 特性
 
 ### 📋 任务管理
@@ -41,12 +59,9 @@
 
 ### 安装
 
-#### 方式一：下载预编译版本
+#### 方式一：下载预编译版本（推荐）
 1. 前往 [Releases](https://github.com/heswy/OrangeDue/releases) 页面
-2. 下载适合您操作系统的安装包：
-   - **Windows**: `OrangeDue Setup 1.0.0.exe`
-   - **macOS**: `OrangeDue-1.0.0.dmg` (Intel) 或 `OrangeDue-1.0.0-arm64.dmg` (Apple Silicon)
-   - **Linux**: `OrangeDue-1.0.0.AppImage`
+2. 下载适合您操作系统的安装包
 3. 运行安装包完成安装
 
 #### 方式二：从源码构建
