@@ -55,7 +55,7 @@ export interface Result<T> {
   };
 }
 
-// Electron API 类型定义
+// API 接口定义
 export interface ElectronAPI {
   lists: {
     getAll(): Promise<Result<List[]>>;
@@ -88,6 +88,6 @@ export interface ElectronAPI {
 
 declare global {
   interface Window {
-    electronAPI: ElectronAPI;
+    api: ElectronAPI;
   }
 }
